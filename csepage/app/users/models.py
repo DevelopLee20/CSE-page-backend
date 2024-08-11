@@ -1,6 +1,5 @@
-from sqlalchemy import Boolean, Column, ForeignKey, Integer, String, Date
-from sqlalchemy.orm import relationship, validates
-from datetime import datetime
+from sqlalchemy import Column, ForeignKey, Integer, String, Date
+from sqlalchemy.orm import validates
 
 from database import Base
 
@@ -48,13 +47,5 @@ class Student(Base):
 class Session(Base):
     __tablename__ = "sessions"
 
-    uuid = Column(Integer, nullable=False, primary_key=True)
+    uuid = Column(String, nullable=False, primary_key=True)
     sid = Column(Integer, ForeignKey("students.sid")) # FK
-
-class LockerReservation(Base):
-    __tablename__ = "lockerreservations"
-
-    studentNumber = Column(Integer, ForeignKey("students.sid"), nullable=True)
-    lockerNumber = Column(Integer, primary_key=True)
-    date = Column(Date)
-    used = Column(Boolean, nullable=False)

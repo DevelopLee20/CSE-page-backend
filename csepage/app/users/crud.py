@@ -1,6 +1,7 @@
 from sqlalchemy.orm import Session
 
-import models, schemas
+import app.users.models as models
+import app.users.schemas as schemas
 
 def get_student(db: Session, student_sid: int):
     return db.query(models.Student).filter(models.Student.sid == student_sid).first()
@@ -39,15 +40,11 @@ def create_session(db: Session, session: schemas.SessionBase) -> None:
     db.add(new_session)
     db.commit()
     db.refresh(new_session)
+    
+def get_session(db: Session, session_uuid: str) -> models.Session:
+    """세션 ID로 세션을 가져오는 함수"""
+    return db.query(models.Session).filter(models.Session.uuid == session_uuid).first()
 
-def create_lockerreservation(db: Session, session: schemas.LockerReservationBase) -> None:
-    new_reservation = models.LockerReservation(
-        studentNumber = session.studentNumber,
-        lockerNumber = session.lockerNumber,
-        date = session.date,
-        used = session.used
-    )
-
-    db.add(new_reservation)
-    db.commit()
-    db.refresh(new_reservation)
+def get_student_by_username(db: Session, username: str) -> models.Student:
+    """사용자 이름으로 학생을 조회하는 함수 (username을 student의 sid로 가정)"""
+    return db.query(models.Student).filter(models.Student.sid == username).first()

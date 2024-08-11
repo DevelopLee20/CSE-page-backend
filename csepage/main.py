@@ -1,23 +1,14 @@
 from fastapi import Depends, FastAPI, HTTPException
 from sqlalchemy.orm import Session
 
-import crud, models, schemas
 from database import SessionLocal, engine
-
-models.Base.metadata.create_all(bind=engine)
+from app.users import routes as user_routes
 
 app = FastAPI()
 
-def get_db():
-    db = SessionLocal()
-    try:
-        yield db
-    finally:
-        db.close()
+app.include_router(user_routes.router, prefix="/users", tags=["users"])
 
-#################### url ####################
-
-@app.post("/ping")
+"""@app.post("/ping")
 def test_ping():
     return {"message": "Hello World"}
 
@@ -36,4 +27,4 @@ def create_session(session: schemas.SessionBase, db: Session = Depends(get_db)):
 
 @app.post("/createreservation", response_model=schemas.LockerReservationBase)
 def create_reservation(session: schemas.LockerReservationBase, db: Session = Depends(get_db)):
-    return crud.create_lockerreservation(db=db, session=session)
+    return crud.create_lockerreservation(db=db, session=session)"""
